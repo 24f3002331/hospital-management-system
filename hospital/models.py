@@ -21,6 +21,7 @@ class Doctor(db.Model):
     experience = db.Column(db.Integer,nullable=False)
     specialization = db.Column(db.String(100),nullable=False)
     description = db.Column(db.Text,nullable=True)
+    pph = db.Column(db.Integer,nullable=False)  # per patient hour
     user_id=db.Column(db.Integer,db.ForeignKey('users.id'),nullable=False)
     appointments = db.relationship('Appointment',backref='doctor',lazy=True)
 

@@ -40,6 +40,7 @@ class AddDoctorForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     specialization = StringField('Specialization', validators=[DataRequired(), Length(min=2, max=100)])
     experience = IntegerField('Years of Experience', validators=[DataRequired()])
+    pph = IntegerField('Patients Per Hour', validators=[DataRequired()])
     # department_id = SelectField('Department', coerce=int, validators=[DataRequired()])
     submit = SubmitField('Add Doctor')
     def validate_username(self,username):

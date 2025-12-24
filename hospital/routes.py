@@ -93,7 +93,7 @@ def add_doc():
         db.session.add(user)
         db.session.commit()
 
-        doctor = Doctor(name=form.name.data,specialization=form.specialization.data,experience=form.experience.data,user_id=user.id,department_id=form.department_id.data)
+        doctor = Doctor(name=form.name.data,specialization=form.specialization.data,experience=form.experience.data,user_id=user.id,department_id=form.department_id.data,pph=form.pph.data)
         db.session.add(doctor)
         db.session.commit()
 
@@ -102,3 +102,12 @@ def add_doc():
     else:
         print(form.errors)
     return render_template('doc_reg.html',form=form)
+
+
+# @app.route("/book_appointment",methods=['GET','POST'])
+# @login_required
+# def book_appointment():
+#     if current_user.role != 'patient':
+#         flash('you are not authorized to perform this action','danger')
+#         return redirect(url_for('home'))
+#     return render_template('book_appointment.html')
