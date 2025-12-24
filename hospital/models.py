@@ -44,6 +44,7 @@ class Patient(db.Model):
 class Appointment(db.Model):
     __tablename__ = 'appointments'
     id = db.Column(db.Integer,primary_key=True)
+    dept_id = db.Column(db.Integer,db.ForeignKey('departments.id'),nullable=False)
     doctor_id = db.Column(db.Integer,db.ForeignKey('doctors.id'),nullable=False) 
     patient_id = db.Column(db.Integer,db.ForeignKey('patients.id'),nullable=False)
     appointment_date = db.Column(db.DateTime,nullable=False)

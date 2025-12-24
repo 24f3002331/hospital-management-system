@@ -48,3 +48,6 @@ class AddDoctorForm(FlaskForm):
         user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError('That username is taken ')
+        
+# class BookAppointmentForm(FlaskForm):
+    

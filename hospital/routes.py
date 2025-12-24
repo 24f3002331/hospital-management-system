@@ -104,10 +104,10 @@ def add_doc():
     return render_template('doc_reg.html',form=form)
 
 
-# @app.route("/book_appointment",methods=['GET','POST'])
-# @login_required
-# def book_appointment():
-#     if current_user.role != 'patient':
-#         flash('you are not authorized to perform this action','danger')
-#         return redirect(url_for('home'))
-#     return render_template('book_appointment.html')
+@app.route("/book_appointment",methods=['GET','POST'])
+@login_required
+def book_appointment():
+    if current_user.role != 'patient':
+        flash('you are not authorized to perform this action','danger')
+        return redirect(url_for('home'))
+    return render_template('book_appointment.html')
