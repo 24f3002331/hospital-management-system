@@ -105,9 +105,9 @@ def doc():
                 flash("unsuccessful","danger")
 
     doctor = Doctor.query.filter_by(user_id=current_user.id).first() 
-    
+    assigned_patients = Patient.query.join(Appointment).filter(Appointment.doctor_id == doctor.id).distinct().all()
      
-    return render_template('doc_dash.html',doctor=doctor)
+    return render_template('doc_dash.html',doctor=doctor,assigned_patients=assigned_patients)
 
 @app.route("/patient")
 def pat():  

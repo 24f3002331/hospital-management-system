@@ -7,9 +7,18 @@
 
     {% set p_obj = user.patient[0] if user.patient else none %}
 
-    <p>
-        <a href="/">Back to Dashboard</a>
-    </p>
+  <p>
+    {% if current_user.role == 'patient' %}
+        <a href="{{ url_for('patient') }}">Back to Dashboard</a>
+        
+    {% elif current_user.role == 'doctor' %}
+        <a href="{{ url_for('doc') }}">Back to Dashboard</a>
+        
+    {% elif current_user.role == 'admin' %}
+        <a href="{{ url_for('admin') }}">Back to Dashboard</a>
+        
+    {% endif %}
+</p>
 
     <h1>Patient Medical History</h1>
     <hr>

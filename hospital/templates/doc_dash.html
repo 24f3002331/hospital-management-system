@@ -54,6 +54,13 @@
     {% endfor %}
 </tbody>
     </table>
+<h2>assigned patient</h2>
+{% for patient in assigned_patients %}
+<tr>
+            <td>{{ patient.name }}</td>
+<a href="{{ url_for('patient_history', patient_id=patient.id) }}">View History</a>        </tr>
+{% endfor %}
+
 
 </body>
 </html>
