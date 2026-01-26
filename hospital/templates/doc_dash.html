@@ -15,10 +15,12 @@
             </tr>
         </thead>
         <tbody>
-            {% for appointment in doctor.appointments %}
+    {% for appointment in doctor.appointments %}
+    
+        {% if appointment.status != 'Completed' %} 
+        
             <tr>
                 <td>{{ appointment.id }}.</td>
-
                 <td>{{ appointment.patient.name }}</td>
 
                 <td>
@@ -28,10 +30,11 @@
                 </td>
 
                 <td>
-                    <!-- <table border="0" cellspacing="0" cellpadding="2">
+                   <table border="0" cellspacing="0" cellpadding="2">
                         <tr>
                             <td>
-                                <form action="/appointment/{{ appointment.id }}/complete" method="POST">
+                                <form action="" method="POST">
+                                    <input type="hidden" name="appointment_id" value="{{ appointment.id }}">
                                     <button type="submit">Mark as Complete</button>
                                 </form>
                             </td>
@@ -41,11 +44,14 @@
                                 </form>
                             </td>
                         </tr>
-                    </table> -->
+                    </table>
                 </td>
             </tr>
-            {% endfor %}
-        </tbody>
+            
+        {% endif %} 
+        
+    {% endfor %}
+</tbody>
     </table>
 
 </body>

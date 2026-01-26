@@ -70,11 +70,29 @@ def admin():
     p_count = Patient.query.count()
     return render_template('admin_dash.html',dcount = d_count,pcount=p_count)
 
-@app.route("/doctor")
+@app.route("/doctor",methods=["GET","POST","DELETE"])
 @login_required
 def doc(): 
+    
+    # print(f"Doctor: {doctor.name}, ID: {doctor.id}, Appointments count: {len(doctor.appointments)}")
+
+    
+    if request.method == "POST":
+        appointment_id = request.form.get("appointment_id")
+        appointment = Appointment.query.get(appointment_id)
+        appointment.status = "Completed"
+        
+        try:
+            db.session.commit()
+            flash('appointment status changed','success')
+            return redirect(url_for('doc'))
+        except:
+            db.session.rollback()
+            flash(f'Error updating status','danger')
+
     doctor = Doctor.query.filter_by(user_id=current_user.id).first() 
-    print(f"Doctor: {doctor.name}, ID: {doctor.id}, Appointments count: {len(doctor.appointments)}")
+    
+     
     return render_template('doc_dash.html',doctor=doctor)
 
 @app.route("/patient")
@@ -279,3 +297,4 @@ def update_patient_history(appointment_id):
             db.session.rollback()
             flash(f'Error updating profile')
     return render_template('update_patient_history.html',appointment=appointment)
+
