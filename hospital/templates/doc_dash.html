@@ -60,7 +60,10 @@
             <td>{{ patient.name }}</td>
 <a href="{{ url_for('patient_history', patient_id=patient.id) }}">View History</a>        </tr>
 {% endfor %}
-
+<br><br>
+<a href="{{ url_for('add_availability') }}">
+        <button>+ Add Availability Slot</button>
+    </a>
 
 </body>
 </html>

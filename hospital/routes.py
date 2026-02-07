@@ -312,3 +312,50 @@ def update_patient_history(appointment_id):
             flash(f'Error updating profile')
     return render_template('update_patient_history.html',appointment=appointment)
 
+@app.route("/add_slot",methods=['POST'])
+@login_required
+def ass_slot():
+    if current_user.role != 'doctor':
+        flash('unauthorised','danger')
+        return redirect(url_for('home'))
+
+@app.route("/add_availability", methods=['GET', 'POST'])
+@login_required
+def add_availability():
+    # Security: Ensure only doctors can access this
+    if current_user.role != 'doctor':
+        flash('Access denied.', 'danger')
+        return redirect(url_for('home'))
+
+    # If the user submitted the form (POST)
+    if request.method == 'POST':
+        doctor = Doctor.query.filter_by(user_id=current_user.id).first()
+        
+        date_str = request.form.get('date')
+        slot = request.form.get('slot')
+
+        if date_str and slot:
+            appt_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+
+            # Check for duplicates (don't add the same slot twice for the same day)
+            existing = Availability.query.filter_by(
+                doctor_id=doctor.id, 
+                date=appt_date, 
+                time_slot=slot
+            ).first()
+
+            if existing:
+                flash('You have already added this slot for this date.', 'warning')
+            else:
+                new_avail = Availability(
+                    doctor_id=doctor.id,
+                    date=appt_date,
+                    time_slot=slot
+                )
+                db.session.add(new_avail)
+                db.session.commit()
+                flash('Availability slot added successfully!', 'success')
+                return redirect(url_for('doc')) # Redirect to dashboard on success
+
+    # If the user is just visiting the page (GET)
+    return render_template('add_slot.html', today=date.today().strftime('%Y-%m-%d'))
