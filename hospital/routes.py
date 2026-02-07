@@ -64,11 +64,12 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route("/admin")
+@app.route("/admin",methods=["GET","POST","DELETE"])
 def admin():
     d_count =  Doctor.query.count()
     p_count = Patient.query.count()
-    return render_template('admin_dash.html',dcount = d_count,pcount=p_count)
+    doctors = Doctor.query.all()
+    return render_template('admin_dash.html',dcount = d_count,pcount=p_count,doctors=doctors)
 
 @app.route("/doctor",methods=["GET","POST","DELETE"])
 @login_required

@@ -1,19 +1,54 @@
 {%extends "base.html"%}
 {%block content%}
 <h1>Admin dashboard</h1>
-<div>
-    <a href = "{{url_for('add_doc')}}">add doc</a> </div>
-<h3>Total Doctors</h3>
-        
-        <h1 style>
-            {{ dcount }}
-        </h1>
-<h3>Total Patients</h3>
-        <h1>
-            {{ pcount }}
-        </h1>
-
 {% if current_user.is_authenticated %}
-<h1><a href ="{{ url_for('logout') }}">LOG OUTTT</a></h1>
+<div>
+    <a href="{{url_for('add_doc')}}">add doc</a>
+</div>
+<h3>Total Doctors</h3>
+
+<h1 style>
+    {{ dcount }}
+</h1>
+<h3>Total Patients</h3>
+<h1>
+    {{ pcount }}
+</h1>
+
+
+
+<div>
+    <h2>Registered Doctors</h2>
+
+
+</div>
+
+<div>
+    {% for doctor in doctors %}
+    <div>
+
+            Dr. {{ doctor.name }}
+
+
+      
+            <a href="#">
+                <button>
+                    edit
+                </button>
+            </a>
+
+            <form action="#" method="DELETE">
+                <button type="submit">
+                    delete
+                </button>
+            </form>
+     
+    </div>
+    {% else %}
+    <p>No doctors registered yet.</p>
+    {% endfor %}
+</div>
+
+<h1><a href="{{ url_for('logout') }}">LOG OUTTT</a></h1>
 {% endif %}
 {% endblock content %}
