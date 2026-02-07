@@ -8,7 +8,7 @@
 
 <a href = "{{url_for('edit_password')}}" >edit username and password</a>
 
-<a href = "{{url_for('patient_history')}}" >Patient History</a>
+<a href = "{{url_for('patient_history',patient_id=patient.id)}}" >Patient History</a>
 
 
 {% endif %}

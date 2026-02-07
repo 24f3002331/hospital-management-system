@@ -66,11 +66,14 @@ def logout():
 
 @app.route("/admin")
 def admin():
+    upcoming_appointments = Appointment.query.filter(
+        Appointment.appointment_date >= date.today()
+    ).order_by(Appointment.appointment_date.asc()).all()
     d_count =  Doctor.query.count()
     p_count = Patient.query.count()
     doctors = Doctor.query.all()
     patients = Patient.query.all()
-    return render_template('admin_dash.html',dcount = d_count,pcount=p_count,doctors=doctors,patients=patients)
+    return render_template('admin_dash.html',dcount = d_count,pcount=p_count,doctors=doctors,patients=patients,appointments=upcoming_appointments)
 
 @app.route("/doctor",methods=["GET","POST","DELETE"])
 @login_required
@@ -283,11 +286,13 @@ def edit_password():
             flash('Error updating profile')
     return render_template('edit_password.html',user=user)
 
-@app.route("/patient_history")
+@app.route("/patient_history/<int:patient_id>")
 @login_required
-def patient_history():
-    user = User.query.filter_by(id=current_user.id).first()
-    return render_template('patient_history.html',user=user)
+def patient_history(patient_id):
+    patient = Patient.query.get(patient_id)
+    appointments = Appointment.query.filter_by(patient_id=patient.id).all()
+    # user = User.query.filter_by(id=current_user.id).first()
+    return render_template('patient_history.html',patient=patient,appointments=appointments)
 
 
 @app.route("/update_patient_history/<int:appointment_id>",methods=["GET","POST"])
@@ -316,7 +321,7 @@ def update_patient_history(appointment_id):
 
 @app.route("/add_slot",methods=['POST'])
 @login_required
-def ass_slot():
+def add_slot():
     if current_user.role != 'doctor':
         flash('unauthorised','danger')
         return redirect(url_for('home'))

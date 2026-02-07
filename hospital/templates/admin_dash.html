@@ -79,6 +79,47 @@
     {% endfor %}
 </div>
 
+<hr>
+
+<h2>Upcoming Appointments</h2>
+
+<table border="1" cellpadding="10" cellspacing="0">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Time Slot</th>
+            <th>Patient Name</th>
+            <th>Doctor Name</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appt in appointments %}
+        <tr>
+            <td>{{ appt.id }}</td>
+            <td>{{ appt.appointment_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ appt.time_slot }}</td>
+            <td>{{ appt.patient.name }}</td>
+            <td>Dr. {{ appt.doctor.name }}</td>
+            <td>{{ appt.status }}</td>
+            <td>
+    <a href="{{ url_for('patient_history',patient_id=appt.patient.id)}}">
+        View
+    </a>
+</td>
+
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7">No upcoming appointments found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
 <h1><a href="{{ url_for('logout') }}">LOG OUTTT</a></h1>
 {% endif %}
 {% endblock content %}
