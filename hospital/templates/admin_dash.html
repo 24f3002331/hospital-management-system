@@ -49,6 +49,36 @@
     {% endfor %}
 </div>
 
+<div>
+    <h2>Registered Patients</h2>
+</div>
+
+<div>
+    {% for patient in patients %}
+
+        <span>
+            {{ patient.name }}
+        </span>
+
+
+            <a href="#">
+                <button>
+                    edit
+                </button>
+            </a>
+
+            <form action="#" method="POST">
+                <button type="submit">
+                    delete
+                </button>
+            </form>
+   
+    </div>
+    {% else %}
+    <p>No patients registered yet.</p>
+    {% endfor %}
+</div>
+
 <h1><a href="{{ url_for('logout') }}">LOG OUTTT</a></h1>
 {% endif %}
 {% endblock content %}

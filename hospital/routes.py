@@ -69,7 +69,8 @@ def admin():
     d_count =  Doctor.query.count()
     p_count = Patient.query.count()
     doctors = Doctor.query.all()
-    return render_template('admin_dash.html',dcount = d_count,pcount=p_count,doctors=doctors)
+    patients = Patient.query.all()
+    return render_template('admin_dash.html',dcount = d_count,pcount=p_count,doctors=doctors,patients=patients)
 
 @app.route("/doctor",methods=["GET","POST","DELETE"])
 @login_required
