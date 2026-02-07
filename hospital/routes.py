@@ -464,3 +464,47 @@ def delete_doctor(doctor_id):
         flash('Still unable to delete. Check console for specific error.', 'danger')
 
     return redirect(url_for('admin'))
+
+@app.route("/delete_patient/<int:patient_id>", methods=['POST'])
+@login_required
+def delete_patient(patient_id):
+    # 1. Security Check
+    if current_user.role != 'admin':
+        flash('Unauthorized access', 'danger')
+        return redirect(url_for('home'))
+
+    patient = Patient.query.get_or_404(patient_id)
+    # Get the user account associated with this patient
+    user = User.query.get(patient.user_id)
+
+    try:
+        # 2. DELETE APPOINTMENTS (AND THEIR TREATMENTS)
+        # We must find all appointments for this patient
+        appointments = Appointment.query.filter_by(patient_id=patient.id).all()
+        
+        for appt in appointments:
+            # If an appointment has a treatment/prescription, delete that first
+            treatment = Treatment.query.filter_by(appointment_id=appt.id).first()
+            if treatment:
+                db.session.delete(treatment)
+            
+            # Now delete the appointment itself
+            db.session.delete(appt)
+
+        # 3. DELETE THE PATIENT PROFILE
+        db.session.delete(patient)
+
+        # 4. DELETE THE USER LOGIN
+        # This removes their ability to log in
+        if user:
+            db.session.delete(user)
+            
+        db.session.commit()
+        flash(f'Patient {patient.name} and all their records have been deleted.', 'success')
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error deleting patient: {e}")
+        flash('Error deleting patient. Check console for details.', 'danger')
+
+    return redirect(url_for('admin'))
