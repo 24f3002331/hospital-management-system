@@ -64,7 +64,7 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route("/admin",methods=["GET","POST","DELETE"])
+@app.route("/admin")
 def admin():
     d_count =  Doctor.query.count()
     p_count = Patient.query.count()
@@ -361,3 +361,30 @@ def add_availability():
 
     # If the user is just visiting the page (GET)
     return render_template('add_slot.html', today=date.today().strftime('%Y-%m-%d'))
+
+@app.route("/edit_doctor/<int:doctor_id>", methods=['GET', 'POST'])
+@login_required
+def edit_doctor(doctor_id):
+    # Security check
+    if current_user.role != 'admin':
+        flash('Unauthorized', 'danger')
+        return redirect(url_for('home'))
+
+    doctor = Doctor.query.get_or_404(doctor_id)
+
+    if request.method == 'POST':
+        # Update fields
+        doctor.name = request.form.get('name')
+        doctor.specialization = request.form.get('specialization')
+        doctor.experience = request.form.get('experience')
+        doctor.pph = request.form.get('pph')
+        doctor.decription = request.form.get('description')
+        try:
+            db.session.commit()
+            flash(f'Doctor {doctor.name} updated successfully!', 'success')
+            return redirect(url_for('admin'))
+        except:
+            db.session.rollback()
+            flash('Error updating doctor details.', 'danger')
+
+    return render_template('edit_doctor.html', doctor=doctor)
